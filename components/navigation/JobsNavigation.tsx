@@ -123,16 +123,13 @@ export function JobsNavigation() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
 
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-      setIsScrolled(scrollY > 100);
-      setIsVisible(scrollY > 100);
+      setIsScrolled(window.scrollY > 100);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -201,8 +198,8 @@ export function JobsNavigation() {
 
   return (
     <>
-      {/* Header: compact on mobile (app-like), full on desktop */}
-      <header className="sticky top-0 z-30 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 safe-area-padding">
+      {/* Header: only on mobile/tablet; desktop uses floating nav only */}
+      <header className="lg:hidden sticky top-0 z-30 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 safe-area-padding">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 md:py-3">
           <div className="flex items-center justify-between min-h-[48px] md:min-h-0">
             <Link href="/jobs" className="flex items-center gap-2 md:gap-3 group shrink-0">
@@ -234,12 +231,17 @@ export function JobsNavigation() {
         </div>
       </header>
 
-      {/* Floating Navigation - Shows after scroll */}
-      {isVisible && (
-        <>
-          {/* Desktop Floating Nav */}
-          <nav className="hidden lg:flex fixed top-4 left-0 right-0 z-50 animate-fade-in justify-center pointer-events-none">
-            <div className="flex items-center gap-1 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-xl dark:shadow-2xl dark:shadow-black/20 rounded-full px-2 py-1.5 border border-gray-200/50 dark:border-gray-700/50 pointer-events-auto">
+      {/* Desktop/Tablet: Floating nav always visible (no sticky header) */}
+      {/* Desktop Floating Nav - always from top */}
+      <nav className="hidden lg:flex fixed top-4 left-0 right-0 z-50 justify-center pointer-events-none">
+        <div className="flex items-center gap-2 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-xl dark:shadow-2xl dark:shadow-black/20 rounded-full pl-3 pr-2 py-1.5 border border-gray-200/50 dark:border-gray-700/50 pointer-events-auto">
+              <Link href="/jobs" className="flex items-center gap-2 shrink-0 mr-1">
+                <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center">
+                  <Briefcase className="h-4 w-4 text-white" />
+                </div>
+                <span className="text-sm font-bold bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent hidden xl:inline">GrowthLab Jobs</span>
+              </Link>
+              <div className="w-px h-6 bg-gray-200 dark:bg-gray-700 shrink-0" />
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const active = isActive(item);
@@ -290,38 +292,36 @@ export function JobsNavigation() {
             </div>
           </nav>
 
-          {/* Tablet Floating Nav - Compact */}
-          <nav className="hidden md:flex lg:hidden fixed top-4 left-0 right-0 z-50 animate-fade-in justify-center pointer-events-none">
-            <div className="flex items-center gap-1 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-xl rounded-full px-3 py-1.5 border border-gray-200/50 dark:border-gray-700/50 pointer-events-auto">
-              {navItems.slice(0, 5).map((item) => {
-                const Icon = item.icon;
-                const active = isActive(item);
+      {/* Tablet Floating Nav - always from top */}
+      <nav className="hidden md:flex lg:hidden fixed top-4 left-0 right-0 z-50 justify-center pointer-events-none">
+        <div className="flex items-center gap-1 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-xl rounded-full px-3 py-1.5 border border-gray-200/50 dark:border-gray-700/50 pointer-events-auto">
+          {navItems.slice(0, 5).map((item) => {
+            const Icon = item.icon;
+            const active = isActive(item);
 
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={cn(
-                      'p-2.5 rounded-full transition-all',
-                      active
-                        ? 'bg-gradient-to-r from-primary to-primary-dark text-white shadow-md'
-                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                    )}
-                  >
-                    <Icon className="h-4 w-4" />
-                  </Link>
-                );
-              })}
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  'p-2.5 rounded-full transition-all',
+                  active
+                    ? 'bg-gradient-to-r from-primary to-primary-dark text-white shadow-md'
+                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                )}
+              >
+                <Icon className="h-4 w-4" />
+              </Link>
+            );
+          })}
 
-              <div className="w-px h-6 bg-gray-200 dark:bg-gray-700" />
+          <div className="w-px h-6 bg-gray-200 dark:bg-gray-700" />
 
-              <NotificationBell />
-              <ThemeToggle />
-              <ProfileDropdown />
-            </div>
-          </nav>
-        </>
-      )}
+          <NotificationBell />
+          <ThemeToggle />
+          <ProfileDropdown />
+        </div>
+      </nav>
 
       {/* Mobile: App-style bottom navigation bar - always visible, solid background */}
       <nav
