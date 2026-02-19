@@ -487,7 +487,7 @@ export function JobsNavigation() {
       {isScrolled && !isMobileMenuOpen && (
         <button
           onClick={scrollToTop}
-          className="fixed left-[4.5rem] fab-above-bottom-nav md:left-4 md:bottom-4 w-12 h-12 min-h-[48px] min-w-[48px] bg-gray-800 dark:bg-gray-700 text-white rounded-full shadow-lg flex items-center justify-center active:opacity-90 z-[40] md:z-50"
+          className="fixed left-4 fab-above-bottom-nav md:bottom-4 w-12 h-12 min-h-[48px] min-w-[48px] bg-gray-800 dark:bg-gray-700 text-white rounded-full shadow-lg flex items-center justify-center active:opacity-90 z-[40] md:z-50"
           aria-label="Scroll to top"
         >
           <ChevronUp className="h-5 w-5" />
