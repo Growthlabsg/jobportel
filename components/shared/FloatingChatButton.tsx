@@ -40,7 +40,7 @@ export function FloatingChatButton({
     <>
       <Button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-primary hover:bg-primary-dark text-white shadow-lg hover:shadow-xl z-30 flex items-center justify-center p-0"
+        className="fixed right-4 bottom-24 md:bottom-6 md:right-6 w-14 h-14 rounded-full bg-primary hover:bg-primary-dark text-white shadow-lg hover:shadow-xl z-30 flex items-center justify-center p-0 touch-target"
         aria-label="Open chat"
       >
         <MessageCircle className="w-6 h-6" />

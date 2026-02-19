@@ -110,6 +110,15 @@ const otherNavItems: NavItem[] = [
   { label: 'Learning', href: '/jobs/learning', icon: BookOpen },
 ];
 
+/** App-style bottom nav: 5 key items on mobile */
+const bottomNavItems: NavItem[] = [
+  { href: '/jobs', label: 'Home', icon: Home, matchPattern: (path) => path === '/jobs' || path === '/jobs/' },
+  { href: '/jobs/find-startup-jobs', label: 'Jobs', icon: Search, matchPattern: (path) => path?.startsWith('/jobs/find-startup-jobs') },
+  { href: '/jobs/my-applications', label: 'Applications', icon: FileText, matchPattern: (path) => path?.startsWith('/jobs/my-applications') },
+  { href: '/jobs/dashboard', label: 'Dashboard', icon: BarChart3, matchPattern: (path) => path?.startsWith('/jobs/dashboard') },
+  { href: '#', label: 'Menu', icon: Menu, matchPattern: () => false },
+];
+
 export function JobsNavigation() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -299,24 +308,56 @@ export function JobsNavigation() {
         </>
       )}
 
-      {/* Mobile Bottom Navigation */}
-      <div className="md:hidden fixed bottom-4 right-4 z-50">
-        {/* Mobile Menu Button */}
-        <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="w-14 h-14 bg-gradient-to-r from-primary to-primary-dark text-white rounded-full shadow-xl flex items-center justify-center hover:opacity-90 transition-all"
-        >
-          {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+      {/* Mobile: App-style bottom navigation bar */}
+      <nav
+        className="md:hidden fixed left-0 right-0 bottom-0 z-40 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-t border-gray-200/80 dark:border-gray-700/80 pb-2 pt-2"
+        style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}
+      >
+        <div className="flex items-center justify-around h-14 px-1">
+          {bottomNavItems.map((item) => {
+            const Icon = item.icon;
+            const active = item.label === 'Menu' ? false : isActive(item);
 
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
+            if (item.label === 'Menu') {
+              return (
+                <button
+                  key="menu"
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  className="touch-target flex flex-col items-center justify-center gap-0.5 min-w-[56px] text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary"
+                  aria-label="Open menu"
+                >
+                  <Menu className="h-6 w-6" />
+                  <span className="text-[10px] font-medium">Menu</span>
+                </button>
+              );
+            }
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`touch-target flex flex-col items-center justify-center gap-0.5 min-w-[56px] transition-colors ${
+                  active
+                    ? 'text-primary dark:text-primary'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary'
+                }`}
+              >
+                <Icon className="h-6 w-6" />
+                <span className="text-[10px] font-medium">{item.label}</span>
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
+
+      {/* Mobile full-screen menu (opened from bottom nav "Menu") */}
+      {isMobileMenuOpen && (
           <>
             <div
               className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm"
               onClick={() => setIsMobileMenuOpen(false)}
             />
-            <div className="absolute bottom-16 right-0 w-64 bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden animate-slide-up z-50">
+            <div className="fixed bottom-20 right-4 left-4 sm:left-auto sm:right-4 sm:w-64 bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden animate-slide-up z-50 max-h-[75vh]">
               <div className="p-2 max-h-[70vh] overflow-y-auto">
                 {/* Mobile Header */}
                 <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200 dark:border-gray-800 px-2">
@@ -494,13 +535,13 @@ export function JobsNavigation() {
             </div>
           </>
         )}
-      </div>
 
-      {/* Scroll to Top Button */}
+      {/* Scroll to Top Button - above bottom nav on mobile */}
       {isScrolled && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-4 left-4 w-12 h-12 bg-gray-800 dark:bg-gray-700 text-white rounded-full shadow-xl flex items-center justify-center hover:bg-gray-700 dark:hover:bg-gray-600 transition-all z-50 animate-fade-in"
+          className="fixed left-4 bottom-24 md:bottom-4 w-12 h-12 touch-target bg-gray-800 dark:bg-gray-700 text-white rounded-full shadow-xl flex items-center justify-center hover:bg-gray-700 dark:hover:bg-gray-600 transition-all z-50 animate-fade-in"
+          aria-label="Scroll to top"
         >
           <ChevronUp className="h-5 w-5" />
         </button>

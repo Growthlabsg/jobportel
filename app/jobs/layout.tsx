@@ -9,7 +9,10 @@ export default function JobsLayout({ children }: { children: ReactNode }) {
   return (
     <CofounderProvider>
       <JobsNavigation />
-      {children}
+      {/* Content area: extra padding on mobile so it clears bottom nav and safe area */}
+      <main className="pb-20 md:pb-0 min-h-screen">
+        {children}
+      </main>
       <FloatingChatButton />
     </CofounderProvider>
   );

@@ -47,13 +47,15 @@ export const Modal = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 p-0 sm:p-4"
       onClick={onClose}
     >
       <div
         className={cn(
-          'relative w-full rounded-lg bg-white dark:bg-gray-800 shadow-xl',
-          'max-h-[90vh] overflow-y-auto',
+          'relative w-full bg-white dark:bg-gray-800 shadow-xl overflow-y-auto',
+          'max-h-[90vh] sm:max-h-[90vh]',
+          'rounded-t-2xl sm:rounded-lg',
+          'min-h-[70vh] sm:min-h-0',
           {
             'max-w-sm': size === 'sm',
             'max-w-md': size === 'md',
@@ -65,19 +67,20 @@ export const Modal = ({
         onClick={(e) => e.stopPropagation()}
       >
         {(title || showCloseButton) && (
-          <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-            {title && <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">{title}</h2>}
+          <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-3 sm:py-4 sticky top-0 bg-white dark:bg-gray-800 z-10">
+            {title && <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100">{title}</h2>}
             {showCloseButton && (
               <button
                 onClick={onClose}
-                className="rounded-lg p-1 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-600 dark:hover:text-gray-300"
+                className="touch-target rounded-lg p-2 -m-2 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-600 dark:hover:text-gray-300"
+                aria-label="Close"
               >
                 <X className="h-5 w-5" />
               </button>
             )}
           </div>
         )}
-        <div className="px-6 py-4">{children}</div>
+        <div className="px-4 sm:px-6 py-4">{children}</div>
       </div>
     </div>
   );
